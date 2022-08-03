@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sangeng.mapper.AclPermissionMapper">
+  <select id="selectPermisson" resultType="java.lang.String">
+    SELECT
+      DISTINCT
+      d.permission_value
+    FROM
+      acl_user AS a
+        LEFT JOIN
+      acl_user_role  AS  b
+      ON
+        a.id=b.user_id
+        LEFT JOIN
+      acl_role_permission	AS c
+      ON
+        b.role_id=c.role_id
+        LEFT JOIN
+      acl_permission  AS d
+      ON
+        c.permission_id=d.id
+
+    WHERE
+      a.username=#{username}
+      AND
+      d.permission_value IS NOT NULL
+      AND
+      LENGTH(d.permission_value)>0
+  </select>
+
+  <select id="selectRoleName" resultType="java.lang.String">
+    SELECT
+      c.role_name
+    FROM
+      acl_user as a
+        LEFT JOIN
+      acl_user_role AS  b
+      ON
+        a.id=b.user_id
+        LEFT JOIN
+      acl_role as c
+      ON
+        b.role_id=c.id
+    WHERE
+      a.username=#{username}
+  </select>
+</mapper>
